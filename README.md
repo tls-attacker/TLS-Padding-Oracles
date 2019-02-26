@@ -18,7 +18,7 @@ Since the identification of different vendors is fairly difficult and requires t
 The currently identified and fixed vulnerabilities are:
 
 * OpenSSL. CVE-2019-1559. TODO link
-* Citrix. CVE-2019-6485. TLS Padding Oracle Vulnerability in Citrix Application Delivery Controller (ADC) and NetScaler Gateway. https://support.citrix.com/article/CTX240139
+* Citrix. CVE-2019-6485. [TLS Padding Oracle Vulnerability in Citrix Application Delivery Controller (ADC) and NetScaler Gateway](https://support.citrix.com/article/CTX240139).
 
 The disclosure process is still running with a handful of vendors. Some of them consider to disable or even completely remove CBC cipher suites from their products.
 
@@ -36,13 +36,13 @@ The CBC mode of operation allows one to encrypt plaintexts of arbitrary length w
 Padding oracle attacks exploit the CBC  malleability. The problem of CBC is that it allows  an  attacker to perform meaningful plaintext modifications without knowing the symmetric key. More concretely, it allows an attacker to flip a specific plaintext bit by flipping a bit in the previous ciphtertext block. This CBC property has already been exploited in many attacks, for example, most recently in the [Efail attack](https://efail.de/).
 
 ### CBC and its usage in the TLS record layer
-In order to protect messages (records) exchanged between TLS peers, it is possible to use different crypto primitives. One of them is a MAC combined with AES in CBC mode of operation. Unluckily, TLS decided to use the MAC-then-PAD-then-Encrypt mechanism, which means that the encryptor first computes a MAC over the plaintext, then pads the message to achieve a multiple of block length, and finally uses AES-CBC to encrypt the ciphertext.
+In order to protect messages (records) exchanged between TLS peers, it is possible to use different cryptographic primitives. One of them is a MAC combined with AES in CBC mode of operation. Unfortunately, TLS decided to use the MAC-then-PAD-then-Encrypt mechanism, which means that the encryptor first computes a MAC over the plaintext, then pads the message to achieve a multiple of block length, and finally uses AES-CBC to encrypt the ciphertext.
 
 For example, if we want to encrypt five bytes of data and use HMAC-SHA (with 20 bytes long output), we end up with two blocks. The second block needs to be padded with 7 bytes 0x06.
 ![Validly formatted MAC and padding](https://github.com/RUB-NDS/TLS-Padding-Oracles/blob/master/img/valid-mac-padding.png)
 
 ### Padding oracle attacks
-In 2002, Vaudenay showed that revealing padding failures after message decryption could have severe consequences for the security of the application. Since the CBC malleability allows an attacker to flip arbitrary message bytes, he is also able to modify specific padding bytes. If the application decrypts the modified message and reports problems related to padding validity, the attacker is able to learn the underlying plaintext. We refer to [this explanation by Erlend Oftedal](https://www.youtube.com/watch?v=VQRHSecu_aw&feature=youtu.be&t=1033) for more details.
+In 2002, Vaudenay showed that revealing padding failures after message decryption could have severe consequences for the security of the application. Since the CBC malleability allows an attacker to flip arbitrary message bytes, the attacker is also able to modify specific padding bytes. If the application decrypts the modified message and reports problems related to padding validity, the attacker is able to learn the underlying plaintext. We refer to [this explanation by Erlend Oftedal](https://www.youtube.com/watch?v=VQRHSecu_aw&feature=youtu.be&t=1033) for more details.
 
 In TLS, the attack is a bit more complex because the targeted TLS connection is always closed once invalid padding is triggered. Nevertheless, the vulnerability is practically exploitable in [BEAST](https://nerdoholic.org/uploads/dergln/beast_part2/ssl_jun21.pdf) scenarios and allows the attacker to decrypt repeated secrets like session cookies. 
 
@@ -53,17 +53,17 @@ Therefore, it is very important that the TLS implementations do not reveal any i
 ### OpenSSL (CVE-2019-1559)
 With  the  help  of  the  Amazon  security  team,  we  identified  a  vulnerability which was mostly found on Amazon servers and  Amazon  Web  Services  (AWS).  Hosts  affected  by  this vulnerability  immediately  respond  to  most  records  with BAD_RECORD_MAC and CLOSE_NOTIFY alerts, and then close the connection. However, if  the  hosts  encounter  a  zero-length record with valid padding and a MAC present, they do not immediately close the TCP connection, regardless of the validity of the MAC. Instead, they keep the connection alive for  more  than  4  seconds  after  sending  the CLOSE_NOTIFY alert.  This difference in behavior is easily observable over the network.  Note that the MAC value does not need to be correct for triggering this timeout,  it is sufficient to create valid padding which causes the decrypted data to be of zero length. 
 
-Further  investigations  revealed  that  the  Amazon  servers were running an implementation which uses the OpenSSL1.0.2 API. In some cases, the function calls to the API return different error codes depending on whether a MAC orpadding error occurred.  The Amazon application then takes different code paths based on these error codes, and the different  paths  result  in  an  observable  difference  in  the  TCP layer. The vulnerable behavior only occurs when AES-NI is not used.
+Further  investigations  revealed  that  the  Amazon  servers were running an implementation which uses the OpenSSL 1.0.2 API. In some cases, the function calls to the API return different error codes depending on whether a MAC or padding error occurred.  The Amazon application then takes different code paths based on these error codes, and the different  paths  result  in  an  observable  difference  in  the  TCP layer. The vulnerable behavior only occurs when AES-NI is not used.
 
 ### Citrix (CVE-2019-6485)
-The vulnerable Citrix implementations first check the last padding byte and then verifies the MAC. If the MAC is invalid, the server closes the connection.   This  is  done  with  either  a  connection  timeout  or  an RST,  depending  on  the  validity  of  the  remaining  padding bytes. However,  if the MAC is valid, the server checks if all  other  remaining  padding  bytes  are  correct. If  they  are not,  the  server  responds  with  a BAD_RECORD_MAC and an RST (if they are valid, the record is well-formed and is accepted). This behavior can be exploited with an attack similar to POODLE. 
+The vulnerable Citrix implementations first check the last padding byte and then verify the MAC. If the MAC is invalid, the server closes the connection.   This  is  done  with  either  a  connection  timeout  or  an RST,  depending  on  the  validity  of  the  remaining  padding bytes. However,  if the MAC is valid, the server checks whether all  other  remaining  padding  bytes  are  correct. If  they  are not,  the  server  responds  with  a BAD_RECORD_MAC and an RST (if they are valid, the record is well-formed and is accepted). This behavior can be exploited with an attack similar to POODLE. 
 
 ## FAQ
 
 ### Can these vulnerabilities be exploited?
 Yes, but exploitation is fairly difficult. If you use one of the above implementations, you should still make sure you have patched.
 
-To be more specific, the attack can be exploited in [BEAST](https://nerdoholic.org/uploads/dergln/beast_part2/ssl_jun21.pdf) scenarios. There are two prerequisites for the attack. First, the attacker must be able to run a script in your browser which sends requests to a vulnerable website. This can be achieved by a JavaScript code. Second, the attacker must be able to modify requests sent by the browser and observe the server behavior. The second prerequisite is much harder to achieve because the attacker must be an active Man-in-the-Middle.
+To be more specific, the attack can be exploited in [BEAST](https://nerdoholic.org/uploads/dergln/beast_part2/ssl_jun21.pdf) scenarios. There are two prerequisites for the attack. First, the attacker must be able to run a script in the victim's browser which sends requests to a vulnerable website. This can be achieved tempting the victim to visit a malicious website. Second, the attacker must be able to modify requests sent by the browser and observe the server behavior. The second prerequisite is much harder to achieve, because the attacker must be an active Man-in-the-Middle.
 
 ### Have these vulnerabilities actually been exploited?
 We have no reason to believe these vulnerabilities have been exploited in the wild so far.
