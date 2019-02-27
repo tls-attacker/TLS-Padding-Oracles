@@ -96,10 +96,13 @@ For example, in one instance experts have introduced
 [a severe form of this vulnerability](https://www.nds.ruhr-uni-bochum.de/media/nds/veroeffentlichungen/2016/10/19/tls-attacker-ccs16.pdf)
 while attempting to patch the code to eliminate it.
 
-Identifying these vulnerabilities is also hard since some of them only manifest under a combination of specific conditions. For example, the OpenSSL vulnerability only manifests in OpenSSL version 1.0.2, only for non-stitched cipher suites, when AES-NI is not used.
+Identifying these vulnerabilities is also hard since some of them only manifest under a combination of specific conditions. For example, the OpenSSL vulnerability only manifests in OpenSSL version 1.0.2, only for non-stitched [1] cipher suites, when AES-NI is not used.
 It also requires subtle interactions between external code that calls the OpenSSL API, and the OpenSSL code itself.
 
 We take this opportunity to suggest deprecating CBC cipher suites in TLS altogether.
+
+[1]: Stitched ciphersuites is an OpenSSL term for optimised implementations of certain commonly used ciphersuites.
+See [here](https://software.intel.com/en-us/articles/improving-openssl-performance) for more details.
 
 ### Why are you not submitting your findings via BugBounty websites?
 
