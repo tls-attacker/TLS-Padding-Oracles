@@ -19,6 +19,7 @@ The currently identified and fixed vulnerabilities are:
 
 * OpenSSL. CVE-2019-1559. [OpenSSL Security Advisory: 0-byte record padding oracle](https://www.openssl.org/news/secadv/20190226.txt)
 * Citrix. CVE-2019-6485. [TLS Padding Oracle Vulnerability in Citrix Application Delivery Controller (ADC) and NetScaler Gateway](https://support.citrix.com/article/CTX240139).
+* F5. CVE-2019-6593. [TMM TLS virtual server vulnerability CVE-2019-6593](https://support.f5.com/csp/article/K10065173).
 
 The disclosure process is still running with a handful of vendors. Some of them consider to disable or even completely remove CBC cipher suites from their products.
 
