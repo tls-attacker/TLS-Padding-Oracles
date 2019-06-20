@@ -11,6 +11,9 @@ Robert Merget, Juraj Somorovsky, Nimrod Aviram, Craig Young, Janis Fliegenschmid
 
 The full paper will be presented at USENIX Security in August 2019.
 
+See the preliminary version [here](TlsPaddingOracleScanning.pdf).
+
+
 ## Who Is Affected?
 
 Since the identification of different vendors is fairly difficult and requires the cooperation of the scanned websites, a lot of our vulnerabilities are not attributed yet. On this Github page, we collect the current status of the responsible disclosure process and give an overview of the revealed vulnerabilities. 
