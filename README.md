@@ -14,6 +14,12 @@ The full paper will be presented at USENIX Security in August 2019.
 See the preliminary version [here](TlsPaddingOracleScanning.pdf).
 
 
+## Presentations
+
+* Blackhat Asia 2019. Zombie POODLE, GOLDENDOODLE, and How TLSv1.3 Can Save Us All. [website](https://www.blackhat.com/asia-19/), [slides](http://i.blackhat.com/asia-19/Fri-March-29/bh-asia-Young-Zombie-Poodle-Goldendoodle-and-How-TLSv13-Can-Save-Us-All.pdf)
+* Summer School on real-world crypto and privacy 2019. Scalable Scanning and Automatic Classification of TLS Padding Oracle Vulnerabilities. [website](https://summerschool-croatia.cs.ru.nl/2019/), [slides](https://summerschool-croatia.cs.ru.nl/2019/slides/somorovsky1.pdf)
+
+
 ## Who Is Affected?
 
 Since the identification of different vendors is fairly difficult and requires the cooperation of the scanned websites, a lot of our vulnerabilities are not attributed yet. On this Github page, we collect the current status of the responsible disclosure process and give an overview of the revealed vulnerabilities. 
