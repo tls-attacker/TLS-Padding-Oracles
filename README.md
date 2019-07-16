@@ -35,9 +35,13 @@ The disclosure process is still running with a handful of vendors. Some of them 
 
 ## Recommendations for TLS Implementations Developers
 If you are developing a TLS implementation, this is obviously a good reminder to review your CBC code and make sure it does not expose a padding oracle; obviously, this is easier said than done.
-**We therefore invite developers of TLS implementations to contact us in this matter.** We will evaluate your implementation and if you are vulnerable, work with you to understand the nature of the vulnerability ([contact](https://www.nds.ruhr-uni-bochum.de/chair/people/merget/)). (To be clear, we will do this free of charge).
+We therefore invite developers of TLS implementations to contact us in this matter. We will evaluate your implementation and if you are vulnerable, work with you to understand the nature of the vulnerability ([contact](https://www.nds.ruhr-uni-bochum.de/chair/people/merget/)). 
 
-We will link the final version of our scanning tool detecting these vulnerabilities in the next days. 
+You can now also use our [TLS-Scanner](https://github.com/RUB-NDS/TLS-Scanner) directly to evaluate your implementation. TLS-Scanner also includes a vulnerability fingerprint, which allows you to detect the underlying vulnerable implementation, see an example below.
+
+![TLS vulnerability fingerprint](https://github.com/RUB-NDS/TLS-Padding-Oracles/blob/master/img/fingerprint.png)
+
+If you find a vulnerable implementation, which is not known to our tool, please contact us.
 
 ## Background
 
