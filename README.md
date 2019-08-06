@@ -30,6 +30,7 @@ The currently identified and fixed vulnerabilities are:
 * Citrix. CVE-2019-6485. [TLS Padding Oracle Vulnerability in Citrix Application Delivery Controller (ADC) and NetScaler Gateway](https://support.citrix.com/article/CTX240139).
 * F5. CVE-2019-6593. [TMM TLS virtual server vulnerability CVE-2019-6593](https://support.f5.com/csp/article/K10065173).
 * SonicWall SonicOs. CVE-2019-7477. [SonicOS & SonicOSv CBC Cipher TLS Padding Vulnerability](https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2019-0003). 
+* Oracle HTTP Server. [Oracle Critical Patch Update Advisory - July 2019](https://www.oracle.com/technetwork/security-advisory/cpujul2019-5072835.html)
 
 The disclosure process is still running with a handful of vendors. Some of them consider to disable or even completely remove CBC cipher suites from their products.
 
