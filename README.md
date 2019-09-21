@@ -9,9 +9,7 @@ We suspect the subtlety of different server responses is the reason these paddin
 
 Robert Merget, Juraj Somorovsky, Nimrod Aviram, Craig Young, Janis Fliegenschmidt, Jörg Schwenk, Yuval Shavitt: *Scalable Scanning and Automatic Classification of TLS Padding Oracle Vulnerabilities.* USENIX Security 2019
 
-The full paper will be presented at USENIX Security in August 2019.
-
-See the preliminary version [here](TlsPaddingOracleScanning.pdf).
+[Link](https://www.usenix.org/system/files/sec19-merget.pdf)
 
 
 ## Presentations
